@@ -1,0 +1,6 @@
+name = "Algorithm-QLearning"
+# badges = ["travis"]
+authority="cpan:MUDLER"
+
+module_maker="ModuleBuildTiny"
+
