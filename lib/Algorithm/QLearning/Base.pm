@@ -89,7 +89,7 @@ sub attr {
         $code .= "  \$_[0];\n}";
 
         warn "-- Attribute $attr in $class\n$code\n\n"
-            if $ENV{DEEME_OBJ_DEBUG};
+            if $ENV{AI_OBJ_DEBUG};
         Carp::croak "Algorithm::QLearning::Base error: $@" unless eval "$code;1";
     }
 }
@@ -139,7 +139,7 @@ Algorithm::QLearning::Base - Minimal base class for Alogirthm::QLearning
 
 =head1 DESCRIPTION
 
-L<Algorithm::QLearning::Base> is a simple base class for L<Deeme>, a fork of  L<Mojo::Base>.
+L<Algorithm::QLearning::Base> is a simple base class for L<Algorithm::QLearning>, a fork of  L<Mojo::Base>.
 
   # Automatically enables "strict", "warnings", "utf8" and Perl 5.10 features
   use Algorithm::QLearning::Base -strict;
@@ -232,10 +232,10 @@ and is also available as C<$_>.
 
 =head1 DEBUGGING
 
-You can set the C<DEEME_OBJ_DEBUG> environment variable to get some advanced
+You can set the C<AI_OBJ_DEBUG> environment variable to get some advanced
 diagnostics information printed to C<STDERR>.
 
-  DEEME_OBJ_DEBUG=1
+  AI_OBJ_DEBUG=1
 
 =head1 SEE ALSO
 
