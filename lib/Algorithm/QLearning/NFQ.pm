@@ -10,12 +10,13 @@ L<Algorithm::QLearning::NFQ> It's an implementation of Q-Learning with Neural Ne
 
 =cut
 
-use feature 'say';
-use constant DEBUG => $ENV{DEBUG} || 0;
 
 use Algorithm::QLearning -base;
 use List::Util qw(max);
 use AI::FANN qw(:all);
+use Algorithm::QLearning;
+use constant DEBUG => $ENV{DEBUG} || 0;
+
 
 =head1 ATTRIBUTES
 
@@ -83,15 +84,9 @@ Optional, define a ANN file where to save the neural network
 
 FANN input size, see L<AI::FANN>
 
-=head2 actions
-
-List of actions of the system (needed if your environment doesn't send the best possible volue for the agent, this enables the automatic search of the best possible value for the next state)
-
-    [1,2,3,4]
-
 =cut
 
-has [qw(brain inputs actions)];
+has [qw(brain inputs)];
 
 =head2 nn
 

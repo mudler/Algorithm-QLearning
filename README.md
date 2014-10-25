@@ -16,6 +16,16 @@ Defaults to `0.5`, it's the discount factor of the Q-Learning function.
 
 Defaults to `1`, it's the learning rate of the Q-Learning function.
 
+## epsilon
+
+Defaults to `0.1`, it's the probability to choose a random path
+
+## actions
+
+List of actions of the system (needed if your environment doesn't send the best possible volue for the agent, this enables the automatic search of the best possible value for the next state)
+
+    [1,2,3,4]
+
 # METHODS
 
 ## qfunc
@@ -23,6 +33,10 @@ Defaults to `1`, it's the learning rate of the Q-Learning function.
 Returns the qvalue of the Q-Learning function.
 
 Takes as input: current status, current action, environment result status, environment reward, \[best\_possible value for next state, optional\]
+
+## egreedy
+
+Return the new picked action, based on the epsilon specified, and the given actions
 
 ## \_bpv
 
