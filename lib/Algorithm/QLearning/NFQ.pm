@@ -10,13 +10,11 @@ L<Algorithm::QLearning::NFQ> It's an implementation of Q-Learning with Neural Ne
 
 =cut
 
-
 use Algorithm::QLearning -base;
 use List::Util qw(max);
 use AI::FANN qw(:all);
 use Algorithm::QLearning;
 use constant DEBUG => $ENV{DEBUG} || 0;
-
 
 =head1 ATTRIBUTES
 
@@ -112,7 +110,7 @@ has nn => sub {
 
 =head2 train
 
-Returns the qvalue of the Q-Learning function using the NN.
+Train and returns the qvalue of the Q-Learning function using the NN (save in places the result and feed the NN).
 
 Takes as input: current status, current action, environment result status, environment reward, [best_possible value for next state, optional]
 
@@ -120,11 +118,40 @@ Takes as input: current status, current action, environment result status, envir
 
 sub train {
     my $self = shift;
-    warn "[*] training @_" if DEBUG;
+    warn "[*] train received these arguments @_" if DEBUG;
     my $qv = $self->qfunc(@_);
-    $self->_nn_train( [ @{ $_[0] }, $_[1] ], [$qv] ) if $self->auto_learn;
+    push( @{ $_[0] }, $_[1] );
+    warn "[*] _nn_train @{ $_[0] } = $qv" if DEBUG;
+    $self->_nn_train( $_[0], [$qv] ) if $self->auto_learn;
     $self->nn->save( $self->brain ) if $self->brain;
     return $qv;
+}
+
+=head2 batch
+
+Same as C<train()> , returns the qvalue of the Q-Learning function using the NN and saves the results to memory instead on learning in pleace
+
+=cut
+
+sub batch {
+    my $self = shift;
+    warn "[*] batch received these arguments @_" if DEBUG;
+    my $qv = $self->qfunc(@_);
+    push( @{ $_[0] }, $_[1] );
+    push( @{ $self->{_queue} }, $_[0], [$qv] ) if $self->auto_learn;
+    return $qv;
+}
+
+=head2 batch_save
+
+Save the neural network, you have to explicitly call this if you used C<batch()>
+
+=cut
+
+sub batch_save {
+    my $self = shift;
+    $self->_nn_train( @{ $self->{_queue} } ) if $self->auto_learn;
+    $self->nn->save( $self->brain ) if $self->brain;
 }
 
 =head2 _bpv
@@ -159,15 +186,14 @@ Takes as input: train_data_input, train_data_desired_output
 #                                         [1, -1], [1],
 #                                         [1, 1], [-1] );
 
-sub _nn_train($) {
+sub _nn_train {
     {
-        my $data = AI::FANN::TrainData->new( $_[1], $_[2] );
+        my $self = shift;
+        my $data = AI::FANN::TrainData->new(@_);
         $data->shuffle;
-        $_[0]->nn->train_on_data(
-            $data, $_[0]->max_epochs,
-            $_[0]->epochs_between_reports,
-            $_[0]->desired_error
-        );
+        $self->nn->train_on_data( $data, $self->max_epochs,
+            $self->epochs_between_reports,
+            $self->desired_error );
 
     }
 }
