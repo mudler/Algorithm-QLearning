@@ -74,6 +74,14 @@ Defaults to C<3>,  FANN neuron hidden layers, see L<AI::FANN>
 
 has hidden_layers => sub {3};
 
+=head2 data_shuffle
+
+Set 1/0 if you want to shuffle the TrainData object before training
+
+=cut
+
+has data_shuffle => sub {0};
+
 =head2 brain
 
 Optional, define a ANN file where to save the neural network
@@ -190,7 +198,7 @@ sub _nn_train {
     {
         my $self = shift;
         my $data = AI::FANN::TrainData->new(@_);
-        $data->shuffle;
+        $data->shuffle if $self->data_shuffle;
         $self->nn->train_on_data( $data, $self->max_epochs,
             $self->epochs_between_reports,
             $self->desired_error );

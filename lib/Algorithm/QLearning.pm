@@ -18,7 +18,7 @@ use Algorithm::QLearning::Base -base;
 use Carp;
 use constant DEBUG => $ENV{DEBUG} || 0;
 
-our $VERSION = "0.01";
+our $VERSION = "0.02";
 
 =head1 ATTRIBUTES
 

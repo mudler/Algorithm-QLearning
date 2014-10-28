@@ -63,6 +63,6 @@
          "url" : "ssh://git://dev.dark-lab.net/2222/mudler/algorithm-qlearning.git"
       }
    },
-   "version" : "0.01",
+   "version" : "0.02",
    "x_authority" : "cpan:MUDLER"
 }
